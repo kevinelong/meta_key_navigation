@@ -1,4 +1,4 @@
-<body>
+<body style="background:#404040;color:white;">
 
 <div>
     <button>Button 1</button>
@@ -13,6 +13,84 @@
     <button>Button 10</button>
 </div>
 
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
+<label>
+    <span>
+        Apple Label
+    </span>
+    <input type="text">
+</label>
 <label>
     <span>
         Apple Label
@@ -88,19 +166,36 @@
     var triggerMetaKey = 'Alt';
 
 
+    function createElement(text) {
+
+        var element = document.createElement('div');
+        element.innerHTML = text;
+        element.style.position = 'absolute';
+        element.style.top = '0';
+        element.style.left = '0';
+        element.style.textDecoration = 'underline';
+        element.style.display = 'none';
+        element.style.backgroundColor = '#CCBB33';
+        element.style.color = '#333300';
+        element.style.padding = '0 1px 1px';
+        element.style.border = '1px solid #333300';
+
+        return element;
+    }
+
     function createNumbers() {
+
         for (var i = 0; i < button_list.length; i++) {
+
             if (i > 9) {
                 return;
             }
+
             var button = button_list[i];
             button.classList.add('key_target');
-            var numberElement = document.createElement('div');
-            numberElement.innerHTML = i + 1;
-            numberElement.style.position = 'absolute';
-            numberElement.style.bottom = '0';
-            numberElement.style.right = '0';
-            numberElement.style.display = 'none';
+
+            var numberElement = createElement(i + 1);
+
             button.style.position = button.style.position ? button.style.position : 'relative';
             button.appendChild(numberElement);
 
@@ -114,40 +209,43 @@
     }
 
 
+    function findAvailableLetter(text) {
+        var index = 0;
+        var letter = '';
+
+        while (index < text.length) {
+
+            letter = text[index];
+            var entry = letterDictionary[letter.toUpperCase()];
+            if (!entry) {
+                return letter;
+            }
+            index++;
+        }
+
+        return letter;
+
+    }
+
     function createLetters() {
 
         for (var i = 0; i < label_list.length; i++) {
 
             var label = label_list[i];
             label.classList.add('key_target');
-            var text = label.innerText[0];
+            var text = label.innerText;
 
             if (text.length == 0) {
                 continue;
             }
-            var index = 0;
-            var letter = '';
 
-            while (index < text.length) {
+            var letter = findAvailableLetter(text);
 
-                letter = text[index];
-                var entry = letterDictionary[letter];
-                if (!entry) {
-                    break;
-                }
-                index++;
-            }
-
-            if (index >= text.length) {
+            if (letter == false) {
                 continue;
             }
 
-            var letterElement = document.createElement('div');
-            letterElement.innerHTML = letter;
-            letterElement.style.position = 'absolute';
-            letterElement.style.bottom = '0';
-            letterElement.style.right = '0';
-            letterElement.style.display = 'none';
+            var letterElement = createElement(letter);
             label.style.position = label.style.position ? label.style.position : 'relative';
             label.appendChild(letterElement);
 
@@ -155,7 +253,7 @@
                 console.log('button clicked', e)
             });
 
-            letterDictionary[letter] = label;
+            letterDictionary[letter.toUpperCase()] = label;
             letterElement_list.push(letterElement);
         }
     }
@@ -234,6 +332,9 @@
     var KEY = 'Key';
 
     document.addEventListener('keypress', function (event) {
+        if (altCount == 0) {
+            return;
+        }
         console.log(event);
         var code = event.code;
 
@@ -246,6 +347,8 @@
                 var d = parseInt(digit) - 1;
                 var button = buttonElement_list[d];
 
+                event.preventDefault();
+
                 if (button) {
                     button.click();
                 }
@@ -257,8 +360,11 @@
 
             if (parts.length > 0) {
                 var key = parts[parts.length - 1];
-                var label = letterDictionary[key];
+                var label = letterDictionary[key.toUpperCase()];
+
                 if (label) {
+                    event.preventDefault();
+
                     label.click();
                 }
 
